@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Africa Explorer — The Continent Challenge</title>
+<style>
+:root{--navy:#12304a;--blue:#176b87;--teal:#27a88a;--gold:#f2bd4b;--cream:#fff9ed;--ink:#203342;--muted:#607486;--red:#bd4b4b;--green:#247b57}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:linear-gradient(135deg,#eaf7f4,#fff5dc);min-height:100vh}
+header{background:var(--navy);color:white;padding:24px 18px;text-align:center;border-bottom:6px solid var(--gold)}
+header .tag{letter-spacing:2px;text-transform:uppercase;font-size:.75rem;color:#bfe9df;font-weight:bold}
+h1{margin:8px 0;font-size:clamp(1.8rem,4vw,2.8rem)}header p{margin:6px auto 0;max-width:720px;line-height:1.5;color:#e6f1f5}
+main{max-width:1000px;margin:24px auto;padding:0 16px 36px}
+.panel{background:white;border-radius:18px;box-shadow:0 8px 26px #12304a16;padding:22px;margin-bottom:18px}
+.topline{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{background:#e7f5f0;color:#145a4b;padding:7px 12px;border-radius:999px;font-weight:bold;font-size:.85rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.stat{background:var(--cream);border:1px solid #f0e2c0;padding:12px;border-radius:12px;text-align:center}
+.stat strong{display:block;font-size:1.4rem;color:var(--navy)}.stat span{font-size:.8rem;color:var(--muted)}
+.progress{height:9px;background:#e6edf0;border-radius:99px;overflow:hidden;margin:14px 0 20px}.bar{height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));width:0%;transition:width .25s}
+h2{color:var(--navy);margin:0 0 12px}h3{margin:0 0 8px;color:var(--navy)}
+#question{font-size:1.3rem;line-height:1.45;font-weight:bold;margin:18px 0}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:13px 15px;transition:transform .12s,box-shadow .12s}
+.answer{background:#f4f8fa;border:2px solid #d8e4e9;text-align:left;color:var(--ink);min-height:58px}
+.answer:hover:not(:disabled){border-color:var(--blue);transform:translateY(-1px);box-shadow:0 4px 12px #12304a12}
+.answer:disabled{cursor:default}.answer.correct{background:#e4f6eb;border-color:#4da879}.answer.wrong{background:#fff0ed;border-color:#d87869}
+.primary{background:var(--blue);color:white;font-weight:bold}.primary:hover{background:#10576f}.secondary{background:#edf3f5;color:var(--navy);font-weight:bold}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+#feedback{margin-top:14px;padding:13px;border-radius:10px;line-height:1.45;display:none}
+#feedback.good{display:block;background:#e6f6ed;border-left:5px solid var(--green)}#feedback.bad{display:block;background:#fff0ed;border-left:5px solid var(--red)}
+.small{color:var(--muted);font-size:.9rem;line-height:1.5}
+#result{display:none;text-align:center}#result h2{font-size:2rem}#finalScore{font-size:2.8rem;color:var(--teal);font-weight:bold;margin:8px}
+.badge{display:inline-block;background:#fff0c8;border:1px solid #f0d47c;border-radius:999px;padding:8px 13px;margin:6px;font-weight:bold}
+details{margin-top:12px}summary{cursor:pointer;font-weight:bold;color:var(--blue)}ul{line-height:1.6}
+footer{text-align:center;color:var(--muted);font-size:.82rem;padding:0 18px 24px}
+@media(max-width:600px){.answers{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.panel{padding:17px}.stat strong{font-size:1.15rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">Intermediate Phase Geography</div>
+  <h1>🌍 Africa Explorer</h1>
+  <p>The Continent Challenge — explore African countries, capitals, oceans, borders, islands and the Equator.</p>
+</header>
+<main>
+  <section class="panel" id="intro">
+    <div class="topline"><span class="pill">GAME-BASED LEARNING</span><span class="pill">20 questions · 2 points each</span></div>
+    <h2>Welcome, explorer!</h2>
+    <p>Test your map skills. Read each question and select one answer. You will receive immediate feedback after every answer.</p>
+    <div class="stats">
+      <div class="stat"><strong>🧭</strong><span>Locate places</span></div>
+      <div class="stat"><strong>🤝</strong><span>Learn and reflect</span></div>
+      <div class="stat"><strong>🏆</strong><span>Earn points</span></div>
+    </div>
+    <p class="small"><strong>How to play:</strong> Work alone or in a small team. Choose an answer, read the feedback, then select “Next question”. Each correct answer earns 2 points. Try to reach 40/40.</p>
+    <button class="primary" id="startBtn">Start the challenge →</button>
+    <details><summary>Teacher information and learning outcomes</summary>
+      <p class="small">Designed for Intermediate Phase learners. Learners practise locating Africa, identifying surrounding oceans and seas, understanding countries and borders, classifying coastal and landlocked countries, identifying the Equator, and distinguishing Madagascar and Zanzibar.</p>
+    </details>
+  </section>
+
+  <section class="panel" id="game" style="display:none">
+    <div class="topline"><span class="pill" id="category">MAP SKILLS</span><span class="pill" id="qCounter">Question 1 of 20</span></div>
+    <div class="stats">
+      <div class="stat"><strong id="score">0</strong><span>Points</span></div>
+      <div class="stat"><strong id="correctCount">0</strong><span>Correct answers</span></div>
+      <div class="stat"><strong id="streak">0</strong><span>Current streak</span></div>
+    </div>
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <div id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div id="feedback" role="status" aria-live="polite"></div>
+    <div class="controls"><button class="primary" id="nextBtn" disabled>Next question →</button><button class="secondary" id="quitBtn">Finish game</button></div>
+  </section>
+
+  <section class="panel" id="result">
+    <div style="font-size:3rem">🏆</div><h2>Challenge complete!</h2>
+    <div id="finalScore">0 / 40</div>
+    <p id="resultMessage"></p>
+    <div id="award"></div>
+    <div class="controls" style="justify-content:center"><button class="primary" id="restartBtn">Play again</button><button class="secondary" onclick="window.print()">Print results</button></div>
+    <details><summary>Review the correct answers</summary><ol id="review"></ol></details>
+  </section>
+  <section class="panel">
+    <h3>Quick map reminder</h3>
+    <p class="small">Africa is bordered by the Atlantic Ocean to the west and the Indian Ocean to the east and southeast. The Mediterranean Sea lies to the north and the Red Sea to the northeast. Madagascar is an island country off southeastern Africa. Zanzibar is an island group belonging to Tanzania. A landlocked country has no coastline on an ocean or sea.</p>
+  </section>
+</main>
+<footer>Created for TISS7412 POE · Africa our continent · Use an atlas or labelled map alongside the game for map-location practice.</footer>
+<script>
+const questions = [
+{c:"Position of Africa",q:"Which continent lies immediately north of Africa, across the Mediterranean Sea?",a:["Europe","South America","Australia","Asia"],k:0,e:"Europe lies north of Africa, across the Mediterranean Sea."},
+{c:"Oceans and seas",q:"Which ocean lies to the west of Africa?",a:["Indian Ocean","Atlantic Ocean","Pacific Ocean","Arctic Ocean"],k:1,e:"The Atlantic Ocean lies to the west of Africa."},
+{c:"Oceans and seas",q:"Which ocean lies to the east and southeast of Africa?",a:["Atlantic Ocean","Southern Ocean only","Indian Ocean","Pacific Ocean"],k:2,e:"The Indian Ocean borders eastern and southeastern Africa."},
+{c:"Oceans and seas",q:"Which sea lies between northern Africa and southern Europe?",a:["Caribbean Sea","Mediterranean Sea","Baltic Sea","Arabian Sea"],k:1,e:"The Mediterranean Sea separates much of northern Africa from southern Europe."},
+{c:"Countries and borders",q:"What is a country border?",a:["A type of mountain","A line or boundary separating territories","A river mouth","A weather pattern"],k:1,e:"A border marks the boundary between countries or territories."},
+{c:"Coastal or landlocked",q:"Which of these African countries is landlocked?",a:["Mozambique","Kenya","Zambia","Morocco"],k:2,e:"Zambia is landlocked because it has no coastline on an ocean or sea."},
+{c:"Coastal or landlocked",q:"Which country has a coastline on the Indian Ocean?",a:["Chad","Botswana","Uganda","Mozambique"],k:3,e:"Mozambique has a long coastline along the Indian Ocean."},
+{c:"Countries and capitals",q:"What is the capital city of Kenya?",a:["Lagos","Nairobi","Accra","Cairo"],k:1,e:"Nairobi is the capital of Kenya."},
+{c:"Countries and capitals",q:"What is the capital city of Egypt?",a:["Cairo","Dakar","Kampala","Luanda"],k:0,e:"Cairo is the capital of Egypt, in northeastern Africa."},
+{c:"Countries and capitals",q:"What is the capital city of Ghana?",a:["Nairobi","Accra","Tunis","Maputo"],k:1,e:"Accra is the capital of Ghana, on the Gulf of Guinea."},
+{c:"Regions",q:"Which country is located in southern Africa?",a:["South Africa","Tunisia","Senegal","Eritrea"],k:0,e:"South Africa is at the southern end of the African continent."},
+{c:"Regions",q:"Which country is located in northern Africa?",a:["Namibia","Egypt","Lesotho","Malawi"],k:1,e:"Egypt is in northeastern Africa and is commonly grouped with northern Africa."},
+{c:"The Equator",q:"Which imaginary line crosses parts of central Africa and divides Earth into the Northern and Southern Hemispheres?",a:["Prime Meridian","Tropic of Capricorn","Equator","Arctic Circle"],k:2,e:"The Equator is at 0° latitude and crosses several African countries."},
+{c:"The Equator",q:"Which country is crossed by the Equator?",a:["Uganda","Morocco","Algeria","South Africa"],k:0,e:"The Equator crosses Uganda, as well as several other African countries."},
+{c:"Islands",q:"Madagascar is best described as…",a:["A landlocked country","An island country east of Mozambique","A city in Tanzania","A desert in northern Africa"],k:1,e:"Madagascar is an island country in the Indian Ocean, off southeastern Africa."},
+{c:"Islands",q:"Zanzibar is part of which country?",a:["Madagascar","Kenya","Tanzania","Somalia"],k:2,e:"Zanzibar is an island group that forms part of Tanzania."},
+{c:"Countries and capitals",q:"What is the capital city of Senegal?",a:["Dakar","Addis Ababa","Tripoli","Harare"],k:0,e:"Dakar is the capital of Senegal in western Africa."},
+{c:"Countries and capitals",q:"What is the capital city of Ethiopia?",a:["Kigali","Addis Ababa","Bamako","Gaborone"],k:1,e:"Addis Ababa is the capital of Ethiopia in the Horn of Africa."},
+{c:"Map reasoning",q:"A country has no coastline on an ocean or sea. How is it classified?",a:["Island country","Coastal country","Landlocked country","Archipelago"],k:2,e:"A landlocked country is surrounded by land and has no ocean or sea coastline."},
+{c:"Map reasoning",q:"Which is the best tool to locate a country's position and borders in Africa?",a:["A political map of Africa","A thermometer","A rainfall chart only","A calendar"],k:0,e:"A political map shows countries and their boundaries, helping learners locate places."}
+];
+let order=[], idx=0, score=0, correct=0, streak=0, bestStreak=0, answersLog=[];
+const $=id=>document.getElementById(id);
+function shuffle(arr){let x=[...arr];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function start(){order=shuffle(questions.map((_,i)=>i));idx=0;score=0;correct=0;streak=0;bestStreak=0;answersLog=[];$("intro").style.display="none";$("result").style.display="none";$("game").style.display="block";render()}
+function render(){const q=questions[order[idx]];$("category").textContent=q.c.toUpperCase();$("qCounter").textContent=`Question ${idx+1} of ${order.length}`;$("score").textContent=score;$("correctCount").textContent=correct;$("streak").textContent=streak;$("progressBar").style.width=`${idx/order.length*100}%`;$("question").textContent=q.q;$("answers").innerHTML="";$("feedback").className="";$("feedback").style.display="none";$("feedback").textContent="";$("nextBtn").disabled=true;$("nextBtn").textContent=idx===order.length-1?"See results →":"Next question →";
+q.a.forEach((answer,i)=>{const b=document.createElement("button");b.className="answer";b.textContent=String.fromCharCode(65+i)+". "+answer;b.onclick=()=>choose(i,b);$("answers").appendChild(b)})}
+function choose(choice,btn){const q=questions[order[idx]], all=[...$("answers").children];all.forEach((b,i)=>{b.disabled=true;if(i===q.k)b.classList.add("correct")});const ok=choice===q.k;if(!ok)btn.classList.add("wrong");if(ok){score+=2;correct++;streak++;bestStreak=Math.max(bestStreak,streak)}else{streak=0}
+$("score").textContent=score;$("correctCount").textContent=correct;$("streak").textContent=streak;$("feedback").className=ok?"good":"bad";$("feedback").style.display="block";$("feedback").textContent=(ok?"Correct! +2 points. ":"Not quite. ")+q.e;$("nextBtn").disabled=false;answersLog.push({q:q.q,chosen:q.a[choice],answer:q.a[q.k],ok});$("progressBar").style.width=`${(idx+1)/order.length*100}%`}
+function next(){if(idx<order.length-1){idx++;render()}else finish()}
+function finish(){ $("game").style.display="none";$("result").style.display="block";$("finalScore").textContent=`${score} / ${order.length*2}`;let msg=score>=36?"Excellent work! You are an Africa Explorer expert.":score>=28?"Great effort! Review a few map skills and try again.":score>=18?"Good start. Practise with an atlas and replay the challenge.":"Keep learning! Use a labelled map, then try the challenge again.";$("resultMessage").textContent=`You answered ${correct} out of ${order.length} questions correctly. ${msg}`;$("award").innerHTML=`<span class="badge">${score>=36?"🌟 Gold Explorer":score>=26?"🧭 Silver Explorer":score>=16?"🌍 Bronze Explorer":"📚 Explorer in Training"}</span><span class="badge">Best streak: ${bestStreak}</span>`;$("review").innerHTML=answersLog.map(x=>`<li>${escapeHtml(x.q)}<br><strong>Correct answer:</strong> ${escapeHtml(x.answer)} ${x.ok?"✓":"— review this one"}</li>`).join("")}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+$("startBtn").addEventListener("click",start);$("nextBtn").addEventListener("click",next);$("quitBtn").addEventListener("click",finish);$("restartBtn").addEventListener("click",start);
+</script>
+</body>
+</html>
